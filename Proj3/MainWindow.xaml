@@ -1,0 +1,66 @@
+﻿<Window x:Class="Proj3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Proj3.ViewModel" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="그림판" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.9*"/>
+        </Grid.RowDefinitions>
+
+        <Button x:Name="button_line" Content="선" HorizontalAlignment="Left" Margin="15,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding DrawingLine}"/>
+        <Button x:Name="button_circle" Content="원" HorizontalAlignment="Left" Margin="80,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding DrawingCircle}"/>
+        <Button x:Name="button_rectangle" Content="사각형" HorizontalAlignment="Left" Margin="145,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding DrawingRectangle}"/>
+        <Button x:Name="button_polygon" Content="다각형" HorizontalAlignment="Left" Margin="210,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding DrawingPolygon}"/>
+        <Button x:Name="button_erase" Content="지우개" HorizontalAlignment="Left" Margin="275,7,0,0" VerticalAlignment="Top" Width="50" 
+                    Height="35" Command="{Binding EraserBtn}"/>
+        <Button x:Name="button_delete" Content="삭제" HorizontalAlignment="Left" Margin="340,7,0,0" VerticalAlignment="Top" Width="50" 
+            Height="35" Command="{Binding DeleteBtn}"/>
+
+        <tk:ColorPicker SelectedColor="{Binding SelectedColor}" Margin="410,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" 
+                        Height="35"/>
+        
+        <Button x:Name="button_fileopen" Content="파일열기" HorizontalAlignment="Left" Margin="520,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding OpenFileBtn}" CommandParameter="{Binding ElementName=DrawingCanvas}"/>
+        <Button x:Name="button_imagecapture" Content="save" HorizontalAlignment="Left" Margin="858,7,0,0" VerticalAlignment="Top" Width="50" 
+                        Height="35" Command="{Binding SaveBtn}" CommandParameter="{Binding ElementName=DrawingCanvas}"/>
+        <Button x:Name="button_allerase" Content="전체삭제" HorizontalAlignment="Left" Margin="923,7,0,0" VerticalAlignment="Top" Width="50" 
+                Height="35" Command="{Binding AllDel}" CommandParameter="{Binding ElementName=canvasborder, Path=Child}"/>
+
+        <Grid Grid.Row="1">
+            <Border x:Name="canvasborder" Grid.Row="1" BorderBrush="Black" BorderThickness="3" CornerRadius="10" Margin="10,10,10,10">
+                <Canvas x:Name="DrawingCanvas" Background="White">
+                    <Image x:Name="DrawingImage" Source="{Binding DisplayImage}" Stretch="Uniform"  Visibility="{Binding ImageVisible}" 
+                           RenderTransformOrigin="0.5,0.5" Margin="20, 20"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding MouseDownCommand}" CommandParameter="{Binding ElementName=DrawingCanvas}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseMove">
+                            <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" CommandParameter="{Binding ElementName=DrawingCanvas}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding MouseUpCommand}" CommandParameter="{Binding ElementName=DrawingCanvas}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseRightButtonUp">
+                            <i:InvokeCommandAction Command="{Binding RightClickCommand}" CommandParameter="{Binding ElementName=DrawingCanvas}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Canvas>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
